@@ -43,6 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\MDSDK\CommonModels.cs">
+      <Link>MDSDK\CommonModels.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MDSDK\CommonModelsWin32.cs">
+      <Link>MDSDK\CommonModelsWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MDSDK\EditorBase.cs">
+      <Link>MDSDK\EditorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MDSDK\ProgramBase.cs">
+      <Link>MDSDK\ProgramBase.cs</Link>
+    </Compile>
+    <Compile Include="Editor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
