@@ -10,27 +10,6 @@ namespace MDSDK_Skeleton
 {
 }
 
-// TODO
-
-// Normalize topic
-// Normalize BOM and encoding.
-// Replace double space with single, recursively (exception: ignore *leading* whitespace within ```; OTHER CASES?).
-// Replace double carriage-return with single, recursively.
-// Replace yml delimters with plain
-// Read yml fields into dictionary, sort some (like req), write out in a rational order (e.g. title, desc, date together).
-// [!Note] => [!NOTE], so they're easier for the writer to spot.
-// Etc.
-
-// Normalize table
-// Replace double hypthen with single.
-// Cellpadding: single space after |, and if there are contents a single space after that (before the next |).
-// Etc.
-
-// To transform table. Table class with collection of col headers and collection of rows (each a collection of cells; one for each col).
-// Load table into class. Read a list of col names that are repeated, and so ignore second and subsequent ones.
-// Refactor each row into one new class (and a heading).
-// Write out each class, normalized.
-
 namespace MDSDKDerived
 {
 	using MDSDK_Skeleton;
@@ -41,7 +20,7 @@ namespace MDSDKDerived
 	internal class Program : ProgramBase
 	{
 		// Logs
-		private Log exampleLog = null;
+		private Log refactoredTables = null;
 
 		// Data
 		private DocSet win10Docs = null;
@@ -58,14 +37,13 @@ namespace MDSDKDerived
 			// Load a docset.
 			this.win10Docs = DocSet.CreateDocSet(DocSetType.ConceptualAndReference, Platform.UWPWindows10, "Win10 docs");
 
-			this.exampleLog = new Log()
+			this.refactoredTables = new Log()
 			{
-				Label = "Text log containing info too verbose for the console.",
-				Filename = "Example_Log.txt",
+				Label = "Unreadable tables refactored into readable tables.",
+				Filename = "refactored-tables-log.txt",
 				AnnouncementStyle = ConsoleWriteStyle.Default
 			};
-			this.RegisterLog(this.exampleLog);
-			this.exampleLog.Add("Example message.");
+			this.RegisterLog(this.refactoredTables);
 
 			//this.uniqueKeyMap = this.LoadUniqueKeyMap("uniqueKeyMap.txt");
 			//this.nonUniqueKeyMap = this.LoadNonUniqueKeyMap("nonUniqueKeyMap.txt");
@@ -88,6 +66,17 @@ namespace MDSDKDerived
 			{
 				firstTable.RemoveRowNumberOneBased(firstTable.RowCount);
 				firstTable.RemoveRedundantColumns(@"\#", @"Format ( DXGI\_FORMAT\_\* )");
+			}
+
+			List<Table> tablePerRow = null;
+			List<List<string>> skippedCellsPerRow = null;
+			(tablePerRow, skippedCellsPerRow) = firstTable.SliceHorizontally(new List<string>{ "Target", "Support" }, 2);
+
+			for (int tableIndex = 0; tableIndex < tablePerRow.Count; ++tableIndex)
+			{
+				string heading = $"{Environment.NewLine}## {skippedCellsPerRow[tableIndex][1]} ({skippedCellsPerRow[tableIndex][0]})";
+				this.refactoredTables.Add(heading);
+				this.refactoredTables.Add(tablePerRow[tableIndex].RenderAsMarkdown());
 			}
 		}
 	}
