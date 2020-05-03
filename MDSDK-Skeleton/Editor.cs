@@ -15,7 +15,7 @@ namespace MDSDKDerived
 	/// </summary>
 	internal class Editor : EditorBase
 	{
-		public Editor(FileInfo fileInfo, XNamespace xNamespace = null) : base(fileInfo, xNamespace) { }
+		public Editor(FileInfo fileInfo) : base(fileInfo) { }
 
 		// Methods that don't modify.
 

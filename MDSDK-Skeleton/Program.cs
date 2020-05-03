@@ -10,6 +10,27 @@ namespace MDSDK_Skeleton
 {
 }
 
+// TODO
+
+// Normalize topic
+// Normalize BOM and encoding.
+// Replace double space with single, recursively (exception: ignore *leading* whitespace within ```; OTHER CASES?).
+// Replace double carriage-return with single, recursively.
+// Replace yml delimters with plain
+// Read yml fields into dictionary, sort some (like req), write out in a rational order (e.g. title, desc, date together).
+// [!Note] => [!NOTE], so they're easier for the writer to spot.
+// Etc.
+
+// Normalize table
+// Replace double hypthen with single.
+// Cellpadding: single space after |, and if there are contents a single space after that (before the next |).
+// Etc.
+
+// To transform table. Table class with collection of col headers and collection of rows (each a collection of cells; one for each col).
+// Load table into class. Read a list of col names that are repeated, and so ignore second and subsequent ones.
+// Refactor each row into one new class (and a heading).
+// Write out each class, normalized.
+
 namespace MDSDKDerived
 {
 	using MDSDK_Skeleton;
@@ -54,31 +75,19 @@ namespace MDSDKDerived
 
 		private void RefactorTables()
 		{
-			Directory.SetCurrentDirectory(@"C:\Users\stwhi\source\repos\win32-pr\desktop-src\direct3ddxgi");
+			var projectDirectoryInfo = new DirectoryInfo(@"C:\Users\stwhi\source\repos\win32-pr\desktop-src\direct3ddxgi");
+			Directory.SetCurrentDirectory(projectDirectoryInfo.FullName);
+
+			Editor editor = EditorBase.GetEditorForTopicFileName(projectDirectoryInfo, "hardware-support-for-direct3d-12-1-formats.md");
 
 			//FileInfo[] mdfiles = dir.GetFiles("*.md", SearchOption.AllDirectories);
 			//FileInfo[] tocFiles = dir.GetFiles("toc.yml", SearchOption.AllDirectories);
 
-			//var editor = new Editor(FileInfo fileInfo);
-
-			OpenMarkdownFile("format-support-for-direct3d-feature-level-10-1-hardware.md", "MISSING format-support-for-direct3d-feature-level-10-1-hardware.md");
-		}
-
-		private static void OpenMarkdownFile(string fileName, string notFoundMessage = null)
-		{
-			FileInfo fileInfo = new FileInfo(fileName);
-			if (!fileInfo.Exists)
+			Table firstTable = editor.CutTable();
+			if (firstTable != null)
 			{
-				ProgramBase.ConsoleWrite(notFoundMessage ?? "Could not find " + fileName, ConsoleWriteStyle.Error);
-				throw new MDSDKException();
-			}
-
-			using (StreamReader streamReader = fileInfo.OpenText())
-			{
-				while (!streamReader.EndOfStream)
-				{
-					streamReader.ReadLine();
-				}
+				firstTable.RemoveRowNumberOneBased(firstTable.RowCount);
+				firstTable.RemoveRedundantColumns(@"\#", @"Format ( DXGI\_FORMAT\_\* )");
 			}
 		}
 	}

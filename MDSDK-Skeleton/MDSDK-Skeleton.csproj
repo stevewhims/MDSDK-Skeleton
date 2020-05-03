@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +55,9 @@
     </Compile>
     <Compile Include="..\..\MDSDK\ProgramBase.cs">
       <Link>MDSDK\ProgramBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MDSDK\Table.cs">
+      <Link>MDSDK\Table.cs</Link>
     </Compile>
     <Compile Include="Editor.cs" />
     <Compile Include="Program.cs" />
