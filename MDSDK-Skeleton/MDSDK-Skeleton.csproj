@@ -53,6 +53,9 @@
     <Compile Include="..\..\MDSDK\EditorBase.cs">
       <Link>MDSDK\EditorBase.cs</Link>
     </Compile>
+    <Compile Include="..\..\MDSDK\ExampleCode.cs">
+      <Link>MDSDK\ExampleCode.cs</Link>
+    </Compile>
     <Compile Include="..\..\MDSDK\ProgramBase.cs">
       <Link>MDSDK\ProgramBase.cs</Link>
     </Compile>
@@ -68,6 +71,10 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\MDSDK\configuration.txt">
+      <Link>configuration.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\MDSDK\TODO.txt">
       <Link>MDSDK\TODO.txt</Link>
     </Content>

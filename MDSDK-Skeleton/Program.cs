@@ -12,72 +12,87 @@ namespace MDSDK_Skeleton
 
 namespace MDSDKDerived
 {
-	using MDSDK_Skeleton;
+    using MDSDK_Skeleton;
+    using Microsoft.VisualBasic;
+    using System.Diagnostics;
 
-	/// <summary>
-	/// See the xml docs for ProgramBase.
-	/// </summary>
-	internal class Program : ProgramBase
-	{
-		// Logs
-		private Log refactoredTables = null;
+    /// <summary>
+    /// See the xml docs for ProgramBase.
+    /// </summary>
+    internal class Program : ProgramBase
+    {
+        // Logs
+        private Log exampleLog = null;
 
-		// Data
-		private DocSet win10Docs = null;
-		//private Dictionary<string, string> uniqueKeyMap = null;
-		//private Dictionary<string, List<string>> nonUniqueKeyMap = null;
+        // Data
+        private DocSet win10Docs = null;
+        //private Dictionary<string, string> uniqueKeyMap = null;
+        //private Dictionary<string, List<string>> nonUniqueKeyMap = null;
 
-		static int Main(string[] args)
-		{
-			return (new Program()).Run();
-		}
+        static int Main(string[] args)
+        {
+            return (new Program()).Run();
+        }
 
-		protected override void OnRun()
-		{
-			// Load a docset.
-			this.win10Docs = DocSet.CreateDocSet(DocSetType.ConceptualAndReference, Platform.UWPWindows10, "Win10 docs");
+        protected override void OnRun()
+        {
+            // Load a docset.
+            this.win10Docs = DocSet.CreateDocSet(DocSetType.ConceptualAndReference, Platform.UWPWindows10, "Win10 docs");
 
-			this.refactoredTables = new Log()
-			{
-				Label = "Unreadable tables refactored into readable tables.",
-				Filename = "refactored-tables-log.txt",
-				AnnouncementStyle = ConsoleWriteStyle.Default
-			};
-			this.RegisterLog(this.refactoredTables);
+            this.exampleLog = new Log()
+            {
+                Label = "Text log containing info too verbose for the console.",
+                Filename = "Example_Log.txt",
+                AnnouncementStyle = ConsoleWriteStyle.Default
+            };
+            this.RegisterLog(this.exampleLog);
+            this.exampleLog.Add("Example message.");
 
-			//this.uniqueKeyMap = this.LoadUniqueKeyMap("uniqueKeyMap.txt");
-			//this.nonUniqueKeyMap = this.LoadNonUniqueKeyMap("nonUniqueKeyMap.txt");
+            var processStartInfo = new ProcessStartInfo("cmd");
+            processStartInfo.CreateNoWindow = true;
+            processStartInfo.RedirectStandardInput = true;
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.UseShellExecute = false;
+            processStartInfo.WorkingDirectory = $"{ProgramBase.MyContentReposFolderDirectoryInfo.FullName}\\{ProgramBase.ContentRepo}";
 
-			RefactorTables();
-		}
+            using (var createBranchProcess = Process.Start(processStartInfo))
+            {
+                createBranchProcess.StandardInput.WriteLine("git pull -p");
+                createBranchProcess.StandardInput.WriteLine("git checkout -b stwhi-master/refactor-mega-tables-3 origin/master");
+                //createBranchProcess.StandardInput.WriteLine("git push --set-upstream origin stwhi-master/refactor-mega-tables-3");
+                createBranchProcess.StandardInput.WriteLine("git status");
+                createBranchProcess.StandardInput.Close();
+                createBranchProcess.WaitForExit();
+                ProgramBase.ConsoleWrite(createBranchProcess.StandardOutput.ReadToEnd(), ConsoleWriteStyle.OutputFromAnotherProcess);
+                createBranchProcess.WaitForExit();
+            }
 
-		private void RefactorTables()
-		{
-			var projectDirectoryInfo = new DirectoryInfo(@"C:\Users\stwhi\source\repos\win32-pr\desktop-src\direct3ddxgi");
-			Directory.SetCurrentDirectory(projectDirectoryInfo.FullName);
+            using (var pushProcess = Process.Start(processStartInfo))
+            {
+                pushProcess.StandardInput.WriteLine("git add .");
+                pushProcess.StandardInput.WriteLine("git commit -a -m \"commit message\"");
+                pushProcess.StandardInput.WriteLine("git push");
+                pushProcess.StandardInput.WriteLine("git status");
+                pushProcess.StandardInput.Close();
+                pushProcess.WaitForExit();
+                ProgramBase.ConsoleWrite(pushProcess.StandardOutput.ReadToEnd(), ConsoleWriteStyle.OutputFromAnotherProcess);
+                pushProcess.WaitForExit();
+            }
 
-			Editor editor = EditorBase.GetEditorForTopicFileName(projectDirectoryInfo, "hardware-support-for-direct3d-12-1-formats.md");
+            using (var deleteBranchProcess = Process.Start(processStartInfo))
+            {
+                deleteBranchProcess.StandardInput.WriteLine("git checkout master");
+                deleteBranchProcess.StandardInput.WriteLine("git branch -D stwhi-master/refactor-mega-tables-3");
+                deleteBranchProcess.StandardInput.WriteLine("git pull -p");
+                deleteBranchProcess.StandardInput.WriteLine("git status");
+                deleteBranchProcess.StandardInput.Close();
+                deleteBranchProcess.WaitForExit();
+                ProgramBase.ConsoleWrite(deleteBranchProcess.StandardOutput.ReadToEnd(), ConsoleWriteStyle.OutputFromAnotherProcess);
+                deleteBranchProcess.WaitForExit();
+            }
 
-			//FileInfo[] mdfiles = dir.GetFiles("*.md", SearchOption.AllDirectories);
-			//FileInfo[] tocFiles = dir.GetFiles("toc.yml", SearchOption.AllDirectories);
-
-			Table firstTable = editor.CutTable();
-			if (firstTable != null)
-			{
-				firstTable.RemoveRowNumberOneBased(firstTable.RowCount);
-				firstTable.RemoveRedundantColumns(@"\#", @"Format ( DXGI\_FORMAT\_\* )");
-			}
-
-			List<Table> tablePerRow = null;
-			List<List<string>> skippedCellsPerRow = null;
-			(tablePerRow, skippedCellsPerRow) = firstTable.SliceHorizontally(new List<string>{ "Target", "Support" }, 2);
-
-			for (int tableIndex = 0; tableIndex < tablePerRow.Count; ++tableIndex)
-			{
-				string heading = $"{Environment.NewLine}## {skippedCellsPerRow[tableIndex][1]} ({skippedCellsPerRow[tableIndex][0]})";
-				this.refactoredTables.Add(heading);
-				this.refactoredTables.Add(tablePerRow[tableIndex].RenderAsMarkdown());
-			}
-		}
-	}
+            //this.uniqueKeyMap = this.LoadUniqueKeyMap("uniqueKeyMap.txt");
+            //this.nonUniqueKeyMap = this.LoadNonUniqueKeyMap("nonUniqueKeyMap.txt");
+        }
+    }
 }
