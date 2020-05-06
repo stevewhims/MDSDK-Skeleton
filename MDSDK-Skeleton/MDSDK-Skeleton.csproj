@@ -56,11 +56,20 @@
     <Compile Include="..\..\MDSDK\ExampleCode.cs">
       <Link>MDSDK\ExampleCode.cs</Link>
     </Compile>
+    <Compile Include="..\..\MDSDK\GitProcess.cs">
+      <Link>MDSDK\GitProcess.cs</Link>
+    </Compile>
     <Compile Include="..\..\MDSDK\ProgramBase.cs">
       <Link>MDSDK\ProgramBase.cs</Link>
     </Compile>
     <Compile Include="..\..\MDSDK\Table.cs">
       <Link>MDSDK\Table.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MDSDK\Win32BuiltTopicLexer.cs">
+      <Link>MDSDK\Win32BuiltTopicLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MDSDK\Win32HeaderLexer.cs">
+      <Link>MDSDK\Win32HeaderLexer.cs</Link>
     </Compile>
     <Compile Include="Editor.cs" />
     <Compile Include="Program.cs" />
