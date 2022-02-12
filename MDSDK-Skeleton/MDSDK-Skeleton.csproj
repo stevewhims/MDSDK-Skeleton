@@ -65,11 +65,14 @@
     <Compile Include="..\..\MDSDK\Table.cs">
       <Link>MDSDK\Table.cs</Link>
     </Compile>
-    <Compile Include="..\..\MDSDK\Win32BuiltTopicLexer.cs">
-      <Link>MDSDK\Win32BuiltTopicLexer.cs</Link>
+    <Compile Include="..\..\MDSDK\Win32APIReferenceBuiltTopicsLexer.cs">
+      <Link>MDSDK\Win32APIReferenceBuiltTopicsLexer.cs</Link>
     </Compile>
-    <Compile Include="..\..\MDSDK\Win32HeaderLexer.cs">
-      <Link>MDSDK\Win32HeaderLexer.cs</Link>
+    <Compile Include="..\..\MDSDK\Win32APIReferenceContentTopicsLexer.cs">
+      <Link>MDSDK\Win32APIReferenceContentTopicsLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MDSDK\WindowsSDKWin32HeaderFileLexer.cs">
+      <Link>MDSDK\WindowsSDKWin32HeaderFileLexer.cs</Link>
     </Compile>
     <Compile Include="Editor.cs" />
     <Compile Include="Program.cs" />

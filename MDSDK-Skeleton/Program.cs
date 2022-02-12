@@ -37,7 +37,7 @@ namespace MDSDKDerived
         protected override void OnRun()
         {
             // Load a docset.
-            this.win10Docs = DocSet.CreateDocSet(DocSetType.ConceptualAndReference, Platform.UWPWindows10, "Win10 docs");
+            // this.win10Docs = DocSet.CreateDocSet(DocSetType.ConceptualAndReference, Platform.UWPWindows10, "Win10 docs");
 
             this.exampleLog = new Log()
             {
@@ -48,13 +48,18 @@ namespace MDSDKDerived
             this.RegisterLog(this.exampleLog);
             this.exampleLog.Add("Example message.");
 
+            ApiRefModelWin32 apiRefModelWin32 = Win32APIReferenceBuiltTopicsLexer.GetApiRefModelWin32();
+            Win32APIReferenceContentTopicsLexer.DocumentTypesForParameters(apiRefModelWin32);
+
+            //Win32APIReferenceContentTopicsLexer.ReportAnyFirstAsteriskInYamlDescription();
+
             // Specifics are in configuration.txt.
-            //GitProcess.CreatePersonalBranch(true);
+            //GitProcess.CreatePersonalBranch(false);
             // Edit and save files here.
             //GitProcess.StageAndCommit();
             // You can now create your pull-request.
             // Delete personal branch now if you're sure you're done with it.
-            //GitProcess.DeletePersonalBranch(true);
+            //GitProcess.DeletePersonalBranch(false);
 
             //this.uniqueKeyMap = this.LoadUniqueKeyMap("uniqueKeyMap.txt");
             //this.nonUniqueKeyMap = this.LoadNonUniqueKeyMap("nonUniqueKeyMap.txt");
